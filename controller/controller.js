@@ -75,6 +75,84 @@ router.get("/article-json", function (req, res) {
             res.json(doc);
         }
     })
-})
+});
+
+router.get("/clearAll", function (req, res) {
+    Article.remove({}, function (err, doc) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("removed all articles");
+        }
+    });
+    res.redirect("/articles-json");
+});
+
+router.get("/readArticle/:id", function (req, res) {
+    var articleId = req.params.id;
+    var hbsObj = {
+        article: [],
+        body: []
+    };
+
+    Article.findOne({ _id: articleId })
+        .populate("note")
+        .exec(function (err, doc) {
+            if (err) {
+                console.log("Error: " + err);
+            } else {
+                hbsObj.article = doc;
+                var link = doc.link;
+                request(link, function (error, response, html) {
+                    var $ = cheerio.load(html);
+
+                    $("css-1nzomwi").each(function (i, element) {
+                        hbsObj.body = $(this)
+                            .children("css-10wtrbd")
+                            .children("p")
+                            .text();
+
+                        res.render("article", hbsObj);
+                        return false;
+                    });
+                });
+            }
+        });
+});
+
+router.post("/note/:id", function (req, res) {
+    var user = req.body.name;
+    var content = req.body.note;
+    var articleId = req.params.id;
+
+    var noteObj = {
+        name: user,
+        body: content
+    };
+
+    var newNote = new Note(noteObj);
+
+    newNote.save(function (err, doc) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(doc._id);
+            console.log(articleId);
+
+            Article.findOneAndUpdate(
+                { _id: req.params.id },
+                { $push: { note: doc._id } },
+                { new: true }
+            ).exec(function (err, doc) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.redirect("/readArticle/" + articleId);
+                }
+            });
+        }
+    });
+});
+
 
 module.exports = router;
