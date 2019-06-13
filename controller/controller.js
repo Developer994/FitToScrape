@@ -9,7 +9,7 @@ var Note = require("../models/Notes.js");
 var Article = require("../models/Article.js");
 
 router.get("/", function (req, res) {
-    res.render("/articles");
+    res.rendirect("/articles");
 });
 
 router.get("/scrape", function (req, res) {
@@ -82,7 +82,7 @@ router.get("/clearAll", function (req, res) {
         if (err) {
             console.log(err);
         } else {
-            console.log("removed all articles");
+            console.log("All Articles have been cleared");
         }
     });
     res.redirect("/articles-json");
