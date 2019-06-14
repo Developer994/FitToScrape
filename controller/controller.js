@@ -5,19 +5,19 @@ var path = require("path");
 var axios = require("axios");
 var cheerio = require("cheerio");
 
-var Note = require("../models/Notes.js");
+var Note = require("../models/Note.js");
 var Article = require("../models/Article.js");
 
 router.get("/", function (req, res) {
-    res.rendirect("/articles");
+    res.redirect("/articles");
 });
 
 router.get("/scrape", function (req, res) {
-    axios.get("https://www.nytimes.com/issue/todayspaper/2019/06/09/todays-new-york-times").then(function (response) {
+    axios.get("http://www.theverge.com").then(function (response) {
         var $ = cheerio.load(response.data);
         var titlesArray = [];
 
-        $("css-195cszl e1f68otr0").each(function (i, element) {
+        $(".c-entry-box--compact__title").each(function (i, element) {
             var result = {};
 
             result.title = $(this)
@@ -106,9 +106,9 @@ router.get("/readArticle/:id", function (req, res) {
                 request(link, function (error, response, html) {
                     var $ = cheerio.load(html);
 
-                    $("css-1nzomwi").each(function (i, element) {
+                    $(".l-col__main").each(function (i, element) {
                         hbsObj.body = $(this)
-                            .children("css-10wtrbd")
+                            .children(".c-entry-content")
                             .children("p")
                             .text();
 

@@ -1,10 +1,9 @@
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 
 var Schema = mongoose.Schema;
-
 var NoteSchema = new Schema({
     name: {
-        type: String,
+        type: String
     },
     body: {
         type: String,
@@ -12,5 +11,5 @@ var NoteSchema = new Schema({
     }
 })
 
-var Notes = mongoose.model("Note", NotesSchema);
+var Note = mongoose.model("Note", NoteSchema);
 module.exports = Note;

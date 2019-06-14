@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 
 var Schema = mongoose.Schema;
 var ArticleSchema = new Schema({
@@ -10,13 +10,12 @@ var ArticleSchema = new Schema({
         type: String,
         required: true
     },
-    notes: [
+    note: [
         {
             type: Schema.Types.ObjectId,
             ref: "Note"
         }
     ]
 })
-
 var Article = mongoose.model("Article", ArticleSchema);
 module.exports = Article;
