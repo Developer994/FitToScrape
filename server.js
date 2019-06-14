@@ -22,8 +22,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // To connect to the mLab on Heroku, we do the following:
-mongoose.connect("mongodb://User:Password994@ds135217.mlab.com:35217/heroku_l1fw1rvb", { useNewUrlParser: true });
 var db = mongoose.connection;
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+
+mongoose.connect(MONGODB_URI);
+
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
