@@ -103,8 +103,8 @@ router.get("/readArticle/:id", function (req, res) {
             } else {
                 hbsObj.article = doc;
                 var link = doc.link;
-                request(link, function (error, response, html) {
-                    var $ = cheerio.load(html);
+                axios.get(link).then(function (response) {
+                    var $ = cheerio.load(response.data);
 
                     $(".l-col__main").each(function (i, element) {
                         hbsObj.body = $(this)
