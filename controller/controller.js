@@ -119,7 +119,7 @@ router.get("/readArticle/:id", function (req, res) {
             }
         });
 });
-router.post("/note/:id", function (req, res) {
+router.post("/notes/:id", function (req, res) {
     var user = req.body.name;
     var content = req.body.note;
     var articleId = req.params.id;
@@ -152,6 +152,5 @@ router.post("/note/:id", function (req, res) {
         }
     });
 });
-
 
 module.exports = router;
